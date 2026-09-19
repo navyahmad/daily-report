@@ -41,27 +41,27 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             
             <!-- Date Banner Indicator -->
-            <div class="flex items-center justify-between p-4 bg-indigo-50 border border-indigo-100 rounded-2xl">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-4 bg-indigo-50 border border-indigo-100 rounded-2xl">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shrink-0">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
                     </div>
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Menampilkan Data Tanggal:</span>
-                        <h3 class="text-base font-bold text-slate-900">
+                    <div class="min-w-0">
+                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-indigo-600">Menampilkan Data Tanggal:</span>
+                        <h3 class="text-sm sm:text-base font-bold text-slate-900 break-words">
                             {{ \Carbon\Carbon::parse($selectedDate)->translatedFormat('l, d F Y') }}
                             @if ($selectedDate === date('Y-m-d'))
-                                <span class="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">Hari Ini</span>
+                                <span class="ml-2 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">Hari Ini</span>
                             @endif
                         </h3>
                     </div>
                 </div>
 
-                <div class="hidden sm:flex items-center gap-2">
+                <div class="w-full sm:w-auto">
                     <a href="{{ route('admin.reports.index', ['date' => $selectedDate, 'division_id' => $selectedDivisionId]) }}" 
-                       class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-50 transition shadow-sm">
+                       class="inline-flex w-full sm:w-auto items-center justify-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-50 transition shadow-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                         </svg>
@@ -71,7 +71,7 @@
             </div>
 
             <!-- 1. STAT CARDS -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
                 <!-- Card 1: Total Karyawan Aktif -->
                 <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>

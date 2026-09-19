@@ -3,9 +3,9 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h2 class="font-bold text-xl text-slate-800 leading-tight">
-                    {{ __('Kelola Akun Admin & HRD') }}
+                    {{ __('Kelola Akun Manager & HRD') }}
                 </h2>
-                <p class="text-xs text-slate-500 mt-0.5">Manajemen akses internal portal Daily Report untuk Administrator dan Tim HRD.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Manajemen akses internal portal Daily Report untuk Manager dan Tim HRD.</p>
             </div>
 
             <div>
@@ -47,7 +47,7 @@
 
             <!-- Users Table Card -->
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                <div class="p-4 sm:p-6 border-b border-slate-100 flex items-center justify-between">
                     <div>
                         <h3 class="text-base font-bold text-slate-900">Daftar Akun Terdaftar</h3>
                         <p class="text-xs text-slate-500 mt-0.5">Total {{ $users->total() }} akun terdaftar dalam sistem.</p>
@@ -90,7 +90,7 @@
                                     <td class="py-4 px-6">
                                         @if ($user->isAdmin())
                                             <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
-                                                Administrator
+                                                Manager
                                             </span>
                                         @elseif ($user->role === 'manager')
                                             <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-100">

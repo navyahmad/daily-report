@@ -13,12 +13,12 @@ class AdminHrdUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Default Administrator Account
+        // 1. Default Administrator / Manager Account
         AdminHrdUser::firstOrCreate(
             ['username' => 'admin'],
             [
-                'name' => 'Administrator Kantor',
-                'password' => Hash::make('password'),
+                'name' => 'Manager Kantor',
+                'password' => Hash::make('Gsindonesi4'),
                 'role' => 'admin',
                 'is_active' => true,
             ]
