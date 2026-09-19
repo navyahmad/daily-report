@@ -29,7 +29,7 @@ class AdminHrdUserSeeder extends Seeder
             ['username' => 'hrd'],
             [
                 'name' => 'Tim HRD Kantor',
-                'password' => Hash::make('Gsindonesi4'),
+                'password' => Hash::make('GSindonesi4'),
                 'role' => 'hrd',
                 'is_active' => true,
             ]
@@ -40,7 +40,7 @@ class AdminHrdUserSeeder extends Seeder
             ['username' => 'manager'],
             [
                 'name' => 'Manager Kantor',
-                'password' => Hash::make('Gsindonesi4'),
+                'password' => Hash::make('GSindonesi4'),
                 'role' => 'manager',
                 'is_active' => true,
             ]
