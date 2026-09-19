@@ -129,7 +129,17 @@ class StoreDailyReportRequest extends FormRequest
             $rules['form_data.kendala'] = ['nullable', 'string'];
             $rules['form_data.rencana_besok'] = ['nullable', 'string'];
         } elseif ($code === 'system_informasi') {
-            $rules['form_data.pekerjaan_hari_ini'] = ['required', 'string'];
+            $rules['form_data.system_activities'] = ['required', 'array', 'min:1'];
+            $rules['form_data.system_activities.*'] = ['string', 'in:seo_organik,google_ads,social_media,maintenance_website,support_it,lainnya'];
+            $rules['form_data.system_activity_details'] = ['required', 'array'];
+
+            $activities = (array) $this->input('form_data.system_activities', []);
+            foreach ($activities as $activity) {
+                if (in_array($activity, ['seo_organik', 'google_ads', 'social_media', 'maintenance_website', 'support_it', 'lainnya'])) {
+                    $rules["form_data.system_activity_details.{$activity}"] = ['required', 'string'];
+                }
+            }
+
             $rules['form_data.status_pengerjaan'] = ['required', 'string'];
             $rules['form_data.kendala'] = ['nullable', 'string'];
             $rules['form_data.rencana_besok'] = ['nullable', 'string'];

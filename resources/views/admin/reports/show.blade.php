@@ -456,10 +456,24 @@
                 <!-- SYSTEM INFORMASI -->
                 @elseif ($code === 'system_informasi')
                     <div class="space-y-4 text-sm">
-                        <div>
-                            <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Pekerjaan Hari Ini:</span>
-                            <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['pekerjaan_hari_ini'] ?? '-' }}</p>
-                        </div>
+                        @if (! empty($data['system_activities']))
+                            <div>
+                                <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Aktivitas Hari Ini:</span>
+                                <div class="space-y-2">
+                                    @foreach ((array) $data['system_activities'] as $activity)
+                                        <div class="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                            <span class="block font-semibold text-slate-800">{{ ucwords(str_replace('_', ' ', $activity)) }}</span>
+                                            <p class="mt-1 whitespace-pre-line text-slate-700">{{ $data['system_activity_details'][$activity] ?? '-' }}</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @else
+                            <div>
+                                <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Pekerjaan Hari Ini:</span>
+                                <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['pekerjaan_hari_ini'] ?? '-' }}</p>
+                            </div>
+                        @endif
 
                         <div>
                             <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Status Pengerjaan:</span>

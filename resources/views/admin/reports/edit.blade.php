@@ -441,11 +441,43 @@
                             </div>
 
                         @elseif ($code === 'system_informasi')
+                            @php
+                                $systemActivities = [
+                                    'seo_organik' => 'Optimasi SEO Organik',
+                                    'google_ads' => 'Google Ads',
+                                    'social_media' => 'Social Media',
+                                    'maintenance_website' => 'Maintenance Website',
+                                    'support_it' => 'IT Support',
+                                    'lainnya' => 'Yang lain',
+                                ];
+                                $selectedSystemActivities = (array) old('form_data.system_activities', $data['system_activities'] ?? []);
+                            @endphp
                             <div class="space-y-4 text-sm">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Pekerjaan Hari Ini:</label>
-                                    <textarea name="form_data[pekerjaan_hari_ini]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.pekerjaan_hari_ini', $data['pekerjaan_hari_ini'] ?? '') }}</textarea>
-                                </div>
+                                @if (! empty($data['system_activities']) || old('form_data.system_activities'))
+                                    <div>
+                                        <label class="mb-2 block text-xs font-semibold text-slate-700">Aktivitas Hari Ini:</label>
+                                        <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                                            @foreach ($systemActivities as $activity => $label)
+                                                <label class="flex items-center gap-2 rounded-xl border border-slate-200 p-3">
+                                                    <input type="checkbox" name="form_data[system_activities][]" value="{{ $activity }}" {{ in_array($activity, $selectedSystemActivities) ? 'checked' : '' }} class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                                                    <span class="text-xs font-semibold text-slate-700">{{ $label }}</span>
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+
+                                    @foreach ($systemActivities as $activity => $label)
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-700 mb-1">Detail {{ $label }}:</label>
+                                            <textarea name="form_data[system_activity_details][{{ $activity }}]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old("form_data.system_activity_details.{$activity}", $data['system_activity_details'][$activity] ?? '') }}</textarea>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Pekerjaan Hari Ini:</label>
+                                        <textarea name="form_data[pekerjaan_hari_ini]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.pekerjaan_hari_ini', $data['pekerjaan_hari_ini'] ?? '') }}</textarea>
+                                    </div>
+                                @endif
 
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-700 mb-1">Status Pengerjaan:</label>

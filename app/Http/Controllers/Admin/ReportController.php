@@ -264,6 +264,20 @@ class ReportController extends Controller
                     if (! empty($data['rencana_besok'])) {
                         $formDataSummary[] = 'Rencana Besok: '.$data['rencana_besok'];
                     }
+                } elseif ($code === 'system_informasi' && $v >= 2 && ! empty($data['system_activities'])) {
+                    $activityStr = [];
+                    foreach ((array) $data['system_activities'] as $activity) {
+                        $detail = $data['system_activity_details'][$activity] ?? '';
+                        $activityStr[] = ucfirst(str_replace('_', ' ', $activity)).($detail ? " ({$detail})" : '');
+                    }
+                    $formDataSummary[] = 'Aktivitas: '.implode('; ', $activityStr);
+                    $formDataSummary[] = 'Status: '.($data['status_pengerjaan'] ?? '-');
+                    if (! empty($data['kendala'])) {
+                        $formDataSummary[] = 'Kendala: '.$data['kendala'];
+                    }
+                    if (! empty($data['rencana_besok'])) {
+                        $formDataSummary[] = 'Rencana Besok: '.$data['rencana_besok'];
+                    }
                 } else {
                     // Fallback for legacy v1 or other divisions
                     foreach ($data as $key => $val) {
