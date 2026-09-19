@@ -18,8 +18,8 @@
     <div class="w-full max-w-md">
         <!-- Logo & Header -->
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 text-white font-bold text-2xl shadow-lg shadow-indigo-600/20 mb-3">
-                DR
+            <div class="inline-flex items-center justify-center h-14 w-32 mb-3">
+                <img src="{{ asset('logo-gs.png') }}" alt="General Solusindo" class="max-h-14 w-full object-contain">
             </div>
             <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Daily Report Kantor</h1>
             <p class="text-xs text-slate-500 mt-1">Portal Khusus Administrator & Tim HRD</p>
