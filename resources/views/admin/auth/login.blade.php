@@ -98,7 +98,7 @@
                 <div>
                     <button type="submit" 
                             class="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-md shadow-indigo-600/20 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
-                        Masuk ke Panel Admin/HRD
+                        Masuk
                     </button>
                 </div>
             </form>
