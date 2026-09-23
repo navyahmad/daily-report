@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\DailyReport;
 use App\Models\Division;
 use App\Models\Employee;
+use App\Support\TomorrowPlan;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
@@ -42,12 +43,14 @@ class StoreDailyReportRequest extends FormRequest
 
         if ($code === 'admin_procurement') {
             $rules['form_data.work_categories'] = ['required', 'array', 'min:1'];
-            $rules['form_data.work_categories.*'] = ['string', 'in:cari_barang,cari_teknisi,po'];
+            $rules['form_data.work_categories.*'] = ['string', 'in:cari_barang,cari_teknisi,po,lainnya'];
             $rules['form_data.barang_diterima_dikirim'] = ['nullable', 'string'];
             $rules['form_data.kendala'] = ['nullable', 'string'];
-            $rules['form_data.rencana_besok'] = ['nullable', 'string'];
 
             $categories = (array) $this->input('form_data.work_categories', []);
+            if (in_array('lainnya', $categories, true)) {
+                $rules['form_data.detail_lainnya'] = ['required', 'string'];
+            }
             if (in_array('cari_barang', $categories)) {
                 $rules['form_data.detail_cari_barang'] = ['required', 'string'];
             }
@@ -79,7 +82,6 @@ class StoreDailyReportRequest extends FormRequest
             }
 
             $rules['form_data.kendala'] = ['nullable', 'string'];
-            $rules['form_data.rencana_besok'] = ['nullable', 'string'];
         } elseif ($code === 'admin_sales') {
             $rules['form_data.today_activities'] = ['required', 'array', 'min:1'];
             $rules['form_data.today_activities.*'] = ['string', 'in:follow_up,membuat_penawaran,meeting,lainnya'];
@@ -120,14 +122,12 @@ class StoreDailyReportRequest extends FormRequest
             $rules['form_data.jurnal'] = ['required', 'string'];
             $rules['form_data.rekap_kas_bank'] = ['nullable', 'string'];
             $rules['form_data.kendala'] = ['nullable', 'string'];
-            $rules['form_data.rencana_besok'] = ['nullable', 'string'];
         } elseif ($code === 'teknisi') {
             $rules['form_data.work_items'] = ['required', 'array', 'min:1'];
             $rules['form_data.work_items.*.type'] = ['required', 'string', 'in:instalasi,maintenance,troubleshooting,survey,remote_support,lainnya'];
             $rules['form_data.work_items.*.detail'] = ['required', 'string'];
             $rules['form_data.work_items.*.status'] = ['required', 'string', 'in:selesai,progres,pending'];
             $rules['form_data.kendala'] = ['nullable', 'string'];
-            $rules['form_data.rencana_besok'] = ['nullable', 'string'];
         } elseif ($code === 'system_informasi') {
             $rules['form_data.system_activities'] = ['required', 'array', 'min:1'];
             $rules['form_data.system_activities.*'] = ['string', 'in:seo_organik,google_ads,social_media,maintenance_website,support_it,lainnya'];
@@ -142,7 +142,10 @@ class StoreDailyReportRequest extends FormRequest
 
             $rules['form_data.status_pengerjaan'] = ['required', 'string'];
             $rules['form_data.kendala'] = ['nullable', 'string'];
-            $rules['form_data.rencana_besok'] = ['nullable', 'string'];
+        }
+
+        if (TomorrowPlan::options($code) !== []) {
+            $rules = array_merge($rules, TomorrowPlan::rules($code, (array) $this->input('form_data.tomorrow_activities', [])));
         }
 
         return $rules;
@@ -215,6 +218,8 @@ class StoreDailyReportRequest extends FormRequest
             'form_data.detail_cari_teknisi' => 'Detail Pencarian Teknisi',
             'form_data.jumlah_po' => 'Jumlah PO Dibuat',
             'form_data.detail_po_vendor' => 'Detail PO dan Vendor',
+            'form_data.detail_lainnya' => 'Detail Pekerjaan Lain Hari Ini',
+            'form_data.tomorrow_activity_details.*' => 'Detail Rencana Besok',
             'form_data.documents_processed' => 'Dokumen yang Diproses',
             'form_data.project_count' => 'Jumlah Project',
             'form_data.projects' => 'Daftar Project',

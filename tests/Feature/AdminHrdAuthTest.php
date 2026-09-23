@@ -55,7 +55,7 @@ class AdminHrdAuthTest extends TestCase
         $response->assertSee('Daily Report Kantor');
         $response->assertSee('Username');
         $response->assertSee('Password');
-        $response->assertSee('Masuk ke Panel Admin/HRD');
+        $response->assertSee('Masuk Akun');
         // Ensure standard Breeze/Laravel registration links are absent
         $response->assertDontSee('Register');
         $response->assertDontSee('Forgot your password?');
@@ -153,7 +153,7 @@ class AdminHrdAuthTest extends TestCase
         // 1. View User List
         $indexResponse = $this->get(route('admin.users.index'));
         $indexResponse->assertStatus(200);
-        $indexResponse->assertSee('Kelola Akun Admin & HRD');
+        $indexResponse->assertSee('Kelola Akun Manager & HRD');
         $indexResponse->assertSee('Staf HRD');
 
         // 2. Create New HRD User

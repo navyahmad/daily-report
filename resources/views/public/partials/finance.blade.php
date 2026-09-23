@@ -121,16 +121,7 @@
         @enderror
     </div>
 
-    <!-- 6. Rencana Pekerjaan Besok -->
-    <div>
-        <label class="block text-sm font-semibold text-slate-700 mb-1">
-            Rencana Pekerjaan Besok
-        </label>
-        <textarea name="form_data[rencana_besok]" rows="3" placeholder="Tulis rencana aktivitas finance besok..."
-                  class="w-full text-sm rounded-xl border-slate-300 focus:border-indigo-500 focus:ring-indigo-500">{{ old('form_data.rencana_besok') }}</textarea>
-        @error('form_data.rencana_besok')
-            <p class="mt-1 text-xs text-rose-500">{{ $message }}</p>
-        @enderror
-    </div>
+    <!-- Rencana Pekerjaan Besok -->
+    @include('public.partials.tomorrow-plan', ['code' => 'finance'])
 </div>
 

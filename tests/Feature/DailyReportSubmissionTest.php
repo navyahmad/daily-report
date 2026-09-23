@@ -85,7 +85,8 @@ class DailyReportSubmissionTest extends TestCase
                     ],
                 ],
                 'kendala' => 'Tidak ada kendala',
-                'rencana_besok' => 'Maintenance rack server gedung B',
+                'tomorrow_activities' => ['maintenance'],
+                'tomorrow_activity_details' => ['maintenance' => 'Maintenance rack server gedung B'],
             ],
         ];
 
@@ -173,7 +174,8 @@ class DailyReportSubmissionTest extends TestCase
                 'detail_po_vendor' => 'PO 001 PT ABC, PO 002 CV XYZ',
                 'barang_diterima_dikirim' => 'Barang masuk 5 unit router',
                 'kendala' => 'Stok vendor terbatas',
-                'rencana_besok' => 'Follow up vendor kabel LAN',
+                'tomorrow_activities' => ['po'],
+                'tomorrow_activity_details' => ['po' => 'Follow up vendor kabel LAN'],
             ],
         ];
 
@@ -216,7 +218,8 @@ class DailyReportSubmissionTest extends TestCase
                     ],
                 ],
                 'kendala' => 'Menunggu approval direksi',
-                'rencana_besok' => 'Kick-off meeting tahap 2',
+                'tomorrow_activities' => ['lainnya'],
+                'tomorrow_activity_details' => ['lainnya' => 'Kick-off meeting tahap 2'],
             ],
         ];
 
@@ -294,7 +297,8 @@ class DailyReportSubmissionTest extends TestCase
                 'jurnal' => 'Pencatatan kas masuk pelunasan invoice 001',
                 'rekap_kas_bank' => 'Saldo akhir kas Rp 25.000.000',
                 'kendala' => '',
-                'rencana_besok' => 'Penagihan invoice jatuh tempo',
+                'tomorrow_activities' => ['invoice'],
+                'tomorrow_activity_details' => ['invoice' => 'Penagihan invoice jatuh tempo'],
             ],
         ];
 
@@ -306,6 +310,35 @@ class DailyReportSubmissionTest extends TestCase
             'division_code_snapshot' => 'finance',
             'form_version' => 2,
         ]);
+    }
+
+    public function test_system_informasi_can_submit_social_media_activity(): void
+    {
+        $sysDiv = Division::create(['name' => 'System Informasi', 'code' => 'system_informasi']);
+        $sysEmp = Employee::create([
+            'division_id' => $sysDiv->id,
+            'name' => 'Rina System',
+            'is_active' => true,
+        ]);
+
+        $this->get(route('report.create'))->assertOk()->assertSee('Social Media');
+
+        $response = $this->post(route('report.store'), [
+            'division_id' => $sysDiv->id,
+            'employee_id' => $sysEmp->id,
+            'report_date' => '2026-09-23',
+            'email' => 'rina@kantor.com',
+            'form_data' => [
+                'system_activities' => ['social_media'],
+                'system_activity_details' => ['social_media' => 'Posting konten Instagram produk baru'],
+                'status_pengerjaan' => 'Selesai',
+                'tomorrow_activities' => ['social_media'],
+                'tomorrow_activity_details' => ['social_media' => 'Jadwalkan konten minggu depan'],
+            ],
+        ]);
+
+        $response->assertRedirect(route('report.success'));
+        $this->assertSame(['social_media'], DailyReport::sole()->form_data['system_activities']);
     }
 
     public function test_teknisi_custom_type_is_required_when_lainnya_is_selected(): void

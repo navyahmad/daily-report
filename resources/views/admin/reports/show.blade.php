@@ -157,10 +157,7 @@
                             <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['kendala'] ?: 'Tidak ada kendala.' }}</p>
                         </div>
 
-                        <div>
-                            <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Rencana Besok:</span>
-                            <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['rencana_besok'] ?: '-' }}</p>
-                        </div>
+                        @include('admin.reports.partials.tomorrow-plan', ['code' => $code, 'data' => $data])
                     </div>
 
                 <!-- ADMIN SALES -->
@@ -370,10 +367,7 @@
                             <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['kendala'] ?: 'Tidak ada kendala.' }}</p>
                         </div>
 
-                        <div>
-                            <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Rencana Besok:</span>
-                            <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['rencana_besok'] ?: '-' }}</p>
-                        </div>
+                        @include('admin.reports.partials.tomorrow-plan', ['code' => $code, 'data' => $data])
                     </div>
 
                 <!-- ADMIN PROCUREMENT -->
@@ -385,7 +379,7 @@
                                 <div class="flex flex-wrap gap-2 mb-3">
                                     @foreach ((array)($data['work_categories'] ?? []) as $cat)
                                         <span class="px-3 py-1 rounded-lg bg-indigo-50 text-indigo-700 font-semibold text-xs border border-indigo-100">
-                                            {{ match($cat) { 'cari_barang' => 'Cari Barang', 'cari_teknisi' => 'Cari Teknisi', 'po' => 'PO', default => ucfirst($cat) } }}
+                                            {{ match($cat) { 'cari_barang' => 'Cari Barang', 'cari_teknisi' => 'Cari Teknisi', 'po' => 'PO', 'lainnya' => 'Yang lain', default => ucfirst($cat) } }}
                                         </span>
                                     @endforeach
                                 </div>
@@ -402,6 +396,13 @@
                                         <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
                                             <span class="font-bold text-xs text-indigo-700 uppercase tracking-wide block mb-1">Detail Cari Teknisi</span>
                                             <p class="text-slate-700 whitespace-pre-line">{{ $data['detail_cari_teknisi'] ?? '-' }}</p>
+                                        </div>
+                                    @endif
+
+                                    @if (in_array('lainnya', (array) ($data['work_categories'] ?? [])))
+                                        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                                            <span class="font-bold text-xs text-indigo-700 uppercase tracking-wide block mb-1">Detail Pekerjaan Lain Hari Ini</span>
+                                            <p class="text-slate-700 whitespace-pre-line">{{ $data['detail_lainnya'] ?? '-' }}</p>
                                         </div>
                                     @endif
 
@@ -439,18 +440,15 @@
 
                         <div>
                             <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Barang yang Diterima atau Dikirim:</span>
-                            <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['barang_diterima_dikirim'] ?: '-' }}</p>
+                            <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ ($data['barang_diterima_dikirim'] ?? '') ?: '-' }}</p>
                         </div>
 
                         <div>
                             <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Kendala:</span>
-                            <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['kendala'] ?: 'Tidak ada kendala.' }}</p>
+                            <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ ($data['kendala'] ?? '') ?: 'Tidak ada kendala.' }}</p>
                         </div>
 
-                        <div>
-                            <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Rencana Besok:</span>
-                            <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['rencana_besok'] ?: '-' }}</p>
-                        </div>
+                        @include('admin.reports.partials.tomorrow-plan', ['code' => $code, 'data' => $data])
                     </div>
 
                 <!-- SYSTEM INFORMASI -->
@@ -485,10 +483,7 @@
                             <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['kendala'] ?: 'Tidak ada kendala.' }}</p>
                         </div>
 
-                        <div>
-                            <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Rencana Besok:</span>
-                            <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['rencana_besok'] ?: '-' }}</p>
-                        </div>
+                        @include('admin.reports.partials.tomorrow-plan', ['code' => $code, 'data' => $data])
                     </div>
 
                 <!-- FINANCE -->
@@ -549,10 +544,7 @@
                             <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['kendala'] ?: 'Tidak ada kendala.' }}</p>
                         </div>
 
-                        <div>
-                            <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Rencana Pekerjaan Besok:</span>
-                            <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 whitespace-pre-line">{{ $data['rencana_besok'] ?: '-' }}</p>
-                        </div>
+                        @include('admin.reports.partials.tomorrow-plan', ['code' => $code, 'data' => $data, 'label' => 'Rencana Pekerjaan Besok'])
                     </div>
 
                 <!-- GENERIC FALLBACK -->

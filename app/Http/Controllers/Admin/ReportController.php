@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateDailyReportRequest;
 use App\Models\DailyReport;
 use App\Models\Division;
 use App\Models\Employee;
+use App\Support\TomorrowPlan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -94,6 +95,7 @@ class ReportController extends Controller
             'employee_name_snapshot' => $employee ? $employee->name : $report->employee_name_snapshot,
             'division_name_snapshot' => $division ? $division->name : $report->division_name_snapshot,
             'division_code_snapshot' => $division ? $division->code : $report->division_code_snapshot,
+            'form_version' => $division?->code === 'admin_procurement' ? max(2, $report->form_version) : $report->form_version,
             'form_data' => $validated['form_data'],
         ]);
 
@@ -186,8 +188,9 @@ class ReportController extends Controller
                     if (! empty($data['kendala'])) {
                         $formDataSummary[] = 'Kendala: '.$data['kendala'];
                     }
-                    if (! empty($data['rencana_besok'])) {
-                        $formDataSummary[] = 'Rencana Besok: '.$data['rencana_besok'];
+                    $tomorrowSummary = TomorrowPlan::summary($code, $data);
+                    if ($tomorrowSummary !== '') {
+                        $formDataSummary[] = 'Rencana Besok: '.$tomorrowSummary;
                     }
                 } elseif ($code === 'admin_sales' && $v >= 2 && ! empty($data['today_activities'])) {
                     $todayStr = [];
@@ -223,8 +226,9 @@ class ReportController extends Controller
                     if (! empty($data['kendala'])) {
                         $formDataSummary[] = 'Kendala: '.$data['kendala'];
                     }
-                    if (! empty($data['rencana_besok'])) {
-                        $formDataSummary[] = 'Rencana Besok: '.$data['rencana_besok'];
+                    $tomorrowSummary = TomorrowPlan::summary($code, $data);
+                    if ($tomorrowSummary !== '') {
+                        $formDataSummary[] = 'Rencana Besok: '.$tomorrowSummary;
                     }
                 } elseif ($code === 'admin_procurement' && $v >= 2 && isset($data['work_categories'])) {
                     $catStr = [];
@@ -233,6 +237,8 @@ class ReportController extends Controller
                             $catStr[] = 'Cari Barang: '.($data['detail_cari_barang'] ?? '-');
                         } elseif ($cat === 'cari_teknisi') {
                             $catStr[] = 'Cari Teknisi: '.($data['detail_cari_teknisi'] ?? '-');
+                        } elseif ($cat === 'lainnya') {
+                            $catStr[] = 'Yang lain: '.($data['detail_lainnya'] ?? '-');
                         } elseif ($cat === 'po') {
                             $catStr[] = "PO ({$data['jumlah_po']}): ".($data['detail_po_vendor'] ?? '-');
                         }
@@ -244,8 +250,9 @@ class ReportController extends Controller
                     if (! empty($data['kendala'])) {
                         $formDataSummary[] = 'Kendala: '.$data['kendala'];
                     }
-                    if (! empty($data['rencana_besok'])) {
-                        $formDataSummary[] = 'Rencana Besok: '.$data['rencana_besok'];
+                    $tomorrowSummary = TomorrowPlan::summary($code, $data);
+                    if ($tomorrowSummary !== '') {
+                        $formDataSummary[] = 'Rencana Besok: '.$tomorrowSummary;
                     }
                 } elseif ($code === 'finance' && $v >= 2 && isset($data['invoice_count'])) {
                     $formDataSummary[] = 'Pekerjaan: '.($data['pekerjaan_hari_ini'] ?? '-');
@@ -261,8 +268,9 @@ class ReportController extends Controller
                     if (! empty($data['kendala'])) {
                         $formDataSummary[] = 'Kendala: '.$data['kendala'];
                     }
-                    if (! empty($data['rencana_besok'])) {
-                        $formDataSummary[] = 'Rencana Besok: '.$data['rencana_besok'];
+                    $tomorrowSummary = TomorrowPlan::summary($code, $data);
+                    if ($tomorrowSummary !== '') {
+                        $formDataSummary[] = 'Rencana Besok: '.$tomorrowSummary;
                     }
                 } elseif ($code === 'system_informasi' && $v >= 2 && ! empty($data['system_activities'])) {
                     $activityStr = [];
@@ -275,8 +283,9 @@ class ReportController extends Controller
                     if (! empty($data['kendala'])) {
                         $formDataSummary[] = 'Kendala: '.$data['kendala'];
                     }
-                    if (! empty($data['rencana_besok'])) {
-                        $formDataSummary[] = 'Rencana Besok: '.$data['rencana_besok'];
+                    $tomorrowSummary = TomorrowPlan::summary($code, $data);
+                    if ($tomorrowSummary !== '') {
+                        $formDataSummary[] = 'Rencana Besok: '.$tomorrowSummary;
                     }
                 } else {
                     // Fallback for legacy v1 or other divisions

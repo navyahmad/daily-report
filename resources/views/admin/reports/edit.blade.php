@@ -197,10 +197,7 @@
                                     <textarea name="form_data[kendala]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.kendala', $data['kendala'] ?? '') }}</textarea>
                                 </div>
 
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Rencana Besok:</label>
-                                    <textarea name="form_data[rencana_besok]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.rencana_besok', $data['rencana_besok'] ?? '') }}</textarea>
-                                </div>
+                                @include('public.partials.tomorrow-plan', ['code' => $code, 'planData' => $data])
                             </div>
 
                         @elseif ($code === 'admin_sales')
@@ -373,72 +370,25 @@
                                     <textarea name="form_data[kendala]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.kendala', $data['kendala'] ?? '') }}</textarea>
                                 </div>
 
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Rencana Besok:</label>
-                                    <textarea name="form_data[rencana_besok]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.rencana_besok', $data['rencana_besok'] ?? '') }}</textarea>
-                                </div>
+                                @include('public.partials.tomorrow-plan', ['code' => $code, 'planData' => $data])
                             </div>
 
                         @elseif ($code === 'admin_procurement')
                             @php
-                                $oldCats = (array) old('form_data.work_categories', $data['work_categories'] ?? []);
-                                if (empty($oldCats)) {
-                                    if (!empty($data['jumlah_po']) && (int)$data['jumlah_po'] > 0) $oldCats[] = 'po';
-                                    if (!empty($data['pekerjaan_hari_ini'])) $oldCats[] = 'cari_barang';
+                                $procurementData = $data;
+                                if (! isset($procurementData['work_categories'])) {
+                                    $procurementData['work_categories'] = [];
+                                    if (! empty($data['jumlah_po']) && (int) $data['jumlah_po'] > 0) {
+                                        $procurementData['work_categories'][] = 'po';
+                                    }
+                                    if (! empty($data['pekerjaan_hari_ini'])) {
+                                        $procurementData['work_categories'][] = 'cari_barang';
+                                    }
+                                    $procurementData['detail_cari_barang'] = $data['pekerjaan_hari_ini'] ?? '';
+                                    $procurementData['detail_po_vendor'] = $data['vendor_dihubungi'] ?? '';
                                 }
                             @endphp
-                            <div class="space-y-4 text-sm" x-data="{
-                                categories: {{ json_encode($oldCats) }},
-                                hasCategory(c) { return this.categories.includes(c); }
-                            }">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-2">Pilihan Kategori Pekerjaan:</label>
-                                    <div class="grid grid-cols-3 gap-2">
-                                        @foreach(['cari_barang' => 'Cari Barang', 'cari_teknisi' => 'Cari Teknisi', 'po' => 'PO'] as $val => $label)
-                                            <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 text-xs cursor-pointer">
-                                                <input type="checkbox" name="form_data[work_categories][]" value="{{ $val }}" x-model="categories" class="rounded border-slate-300 text-indigo-600">
-                                                <span>{{ $label }}</span>
-                                            </label>
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                <div x-show="hasCategory('cari_barang')">
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Detail Cari Barang:</label>
-                                    <textarea name="form_data[detail_cari_barang]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.detail_cari_barang', $data['detail_cari_barang'] ?? ($data['pekerjaan_hari_ini'] ?? '')) }}</textarea>
-                                </div>
-
-                                <div x-show="hasCategory('cari_teknisi')">
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Detail Cari Teknisi:</label>
-                                    <textarea name="form_data[detail_cari_teknisi]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.detail_cari_teknisi', $data['detail_cari_teknisi'] ?? '') }}</textarea>
-                                </div>
-
-                                <div x-show="hasCategory('po')" class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Jumlah PO Dibuat:</label>
-                                        <input type="number" min="1" name="form_data[jumlah_po]" value="{{ old('form_data.jumlah_po', $data['jumlah_po'] ?? 1) }}" class="w-32 text-xs rounded-xl border-slate-300 bg-white">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-700 mb-1">Detail PO & Vendor:</label>
-                                        <textarea name="form_data[detail_po_vendor]" rows="2" class="w-full text-xs rounded-xl border-slate-300 bg-white">{{ old('form_data.detail_po_vendor', $data['detail_po_vendor'] ?? ($data['vendor_dihubungi'] ?? '')) }}</textarea>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Barang Diterima/Dikirim:</label>
-                                    <textarea name="form_data[barang_diterima_dikirim]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.barang_diterima_dikirim', $data['barang_diterima_dikirim'] ?? '') }}</textarea>
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Kendala:</label>
-                                    <textarea name="form_data[kendala]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.kendala', $data['kendala'] ?? '') }}</textarea>
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Rencana Besok:</label>
-                                    <textarea name="form_data[rencana_besok]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.rencana_besok', $data['rencana_besok'] ?? '') }}</textarea>
-                                </div>
-                            </div>
+                            @include('public.partials.admin_procurement', ['procurementData' => $procurementData])
 
                         @elseif ($code === 'system_informasi')
                             @php
@@ -489,10 +439,7 @@
                                     <textarea name="form_data[kendala]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.kendala', $data['kendala'] ?? '') }}</textarea>
                                 </div>
 
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Rencana Besok:</label>
-                                    <textarea name="form_data[rencana_besok]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.rencana_besok', $data['rencana_besok'] ?? '') }}</textarea>
-                                </div>
+                                @include('public.partials.tomorrow-plan', ['code' => $code, 'planData' => $data])
                             </div>
 
                         @elseif ($code === 'finance')
@@ -547,10 +494,7 @@
                                     <textarea name="form_data[kendala]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.kendala', $data['kendala'] ?? '') }}</textarea>
                                 </div>
 
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-700 mb-1">Rencana Besok:</label>
-                                    <textarea name="form_data[rencana_besok]" rows="2" class="w-full text-xs rounded-xl border-slate-300">{{ old('form_data.rencana_besok', $data['rencana_besok'] ?? '') }}</textarea>
-                                </div>
+                                @include('public.partials.tomorrow-plan', ['code' => $code, 'planData' => $data])
                             </div>
                         @endif
                     </div>

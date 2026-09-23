@@ -3,6 +3,7 @@
     $systemActivities = [
         'seo_organik' => 'Optimasi SEO Organik',
         'google_ads' => 'Google Ads',
+        'social_media' => 'Social Media',
         'maintenance_website' => 'Maintenance Website',
         'support_it' => 'IT Support',
         'lainnya' => 'Yang lain',
@@ -76,12 +77,6 @@
         @enderror
     </div>
 
-    <div>
-        <label class="mb-1 block text-sm font-semibold text-slate-700">Rencana Besok</label>
-        <textarea name="form_data[rencana_besok]" rows="3" placeholder="Tulis rencana pekerjaan selanjutnya..."
-                  class="w-full rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('form_data.rencana_besok') }}</textarea>
-        @error('form_data.rencana_besok')
-            <p class="mt-1 text-xs text-rose-500">{{ $message }}</p>
-        @enderror
-    </div>
+    <!-- Rencana Pekerjaan Besok -->
+    @include('public.partials.tomorrow-plan', ['code' => 'system_informasi'])
 </div>
