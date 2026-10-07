@@ -32,6 +32,10 @@ class ReportController extends Controller
             $query->where('division_id', $request->division_id);
         }
 
+        if ($request->filled('employee_id')) {
+            $query->where('employee_id', $request->employee_id);
+        }
+
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
@@ -138,6 +142,10 @@ class ReportController extends Controller
 
         if ($request->filled('division_id')) {
             $query->where('division_id', $request->division_id);
+        }
+
+        if ($request->filled('employee_id')) {
+            $query->where('employee_id', $request->employee_id);
         }
 
         if ($request->filled('status')) {

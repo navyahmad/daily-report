@@ -35,7 +35,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin_hrd', 'admin.act
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Employee Management
-    Route::resource('employees', EmployeeController::class)->except(['show', 'destroy']);
+    Route::resource('employees', EmployeeController::class)->except(['destroy']);
     Route::patch('/employees/{employee}/toggle-status', [EmployeeController::class, 'toggleStatus'])
         ->name('employees.toggle-status');
 

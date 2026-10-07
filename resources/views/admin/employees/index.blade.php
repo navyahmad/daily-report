@@ -112,6 +112,11 @@
                                     </td>
                                     <td class="py-3.5 px-6 text-right">
                                         <div class="flex flex-col items-end gap-2 sm:flex-row sm:justify-end sm:items-center">
+                                            <a href="{{ route('admin.employees.show', $employee) }}"
+                                               class="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition">
+                                                Rekap
+                                            </a>
+
                                             <a href="{{ route('admin.employees.edit', $employee) }}" 
                                                class="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
                                                 Edit
@@ -170,6 +175,11 @@
                             </div>
 
                             <div class="mt-4 flex gap-2">
+                                <a href="{{ route('admin.employees.show', $employee) }}"
+                                   class="flex-1 text-center text-xs font-semibold px-2.5 py-2 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition">
+                                    Rekap
+                                </a>
+
                                 <a href="{{ route('admin.employees.edit', $employee) }}" 
                                    class="flex-1 text-center text-xs font-semibold px-2.5 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
                                     Edit

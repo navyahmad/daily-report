@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Division;
 use App\Models\Employee;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -67,6 +68,56 @@ class EmployeeController extends Controller
 
         return redirect()->route('admin.employees.index')
             ->with('success', 'Data karyawan berhasil ditambahkan.');
+    }
+
+    /**
+     * Display the daily report recap of the specified employee.
+     */
+    public function show(Request $request, Employee $employee): View
+    {
+        $filters = $request->validate([
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+        ]);
+
+        // Default periode: bulan berjalan.
+        $startDate = $filters['start_date'] ?? null;
+        $endDate = $filters['end_date'] ?? null;
+        if (! $startDate && ! $endDate) {
+            $startDate = now()->startOfMonth()->toDateString();
+            $endDate = now()->endOfMonth()->toDateString();
+        } elseif (! $endDate) {
+            $endDate = max($startDate, now()->toDateString());
+        } elseif (! $startDate) {
+            $startDate = Carbon::parse($endDate)->startOfMonth()->toDateString();
+        }
+
+        $employee->load('division');
+
+        $periodQuery = $employee->dailyReports()
+            ->whereDate('report_date', '>=', $startDate)
+            ->whereDate('report_date', '<=', $endDate);
+
+        $periodActiveCount = (clone $periodQuery)->active()->count();
+        $periodCancelledCount = (clone $periodQuery)->where('status', 'cancelled')->count();
+        $totalActiveCount = $employee->dailyReports()->active()->count();
+        $lastReport = $employee->dailyReports()->active()->latest('report_date')->first();
+
+        $reports = $periodQuery->orderBy('report_date', 'desc')
+            ->orderBy('submitted_at', 'desc')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('admin.employees.show', compact(
+            'employee',
+            'startDate',
+            'endDate',
+            'periodActiveCount',
+            'periodCancelledCount',
+            'totalActiveCount',
+            'lastReport',
+            'reports'
+        ));
     }
 
     /**
