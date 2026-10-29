@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureAdminHrdIsActive;
 use App\Http\Middleware\EnsureAdminRole;
+use App\Http\Middleware\EnsureHrdRole;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin.active' => EnsureAdminHrdIsActive::class,
             'role.admin' => EnsureAdminRole::class,
+            'role.hrd' => EnsureHrdRole::class,
         ]);
 
         $middleware->redirectTo(

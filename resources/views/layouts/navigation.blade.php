@@ -22,6 +22,12 @@
                         {{ __('Data Karyawan') }}
                     </x-nav-link>
 
+                    @if(auth('admin_hrd')->user()?->isHrd())
+                        <x-nav-link :href="route('admin.hrd-reports.index')" :active="request()->routeIs('admin.hrd-reports.*')">
+                            {{ __('Daily Report HRD') }}
+                        </x-nav-link>
+                    @endif
+
                     @if(auth('admin_hrd')->user()?->isAdmin())
                         <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
                             {{ __('Kelola Akun') }}
@@ -94,6 +100,11 @@
             <x-responsive-nav-link :href="route('admin.employees.index')" :active="request()->routeIs('admin.employees.*')">
                 {{ __('Data Karyawan') }}
             </x-responsive-nav-link>
+            @if(auth('admin_hrd')->user()?->isHrd())
+                <x-responsive-nav-link :href="route('admin.hrd-reports.index')" :active="request()->routeIs('admin.hrd-reports.*')">
+                    {{ __('Daily Report HRD') }}
+                </x-responsive-nav-link>
+            @endif
             @if(auth('admin_hrd')->user()?->isAdmin())
                 <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
                     {{ __('Kelola Akun') }}
